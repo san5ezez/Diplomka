@@ -44,11 +44,11 @@ export const useContent = () => {
   }
 
   async function addContent() {
-    const { user } = useUser()
+    const { userRemake } = useUser()
     loading.value.newContent = true
     try {
-      if (newContent.value && user.value) {
-        newContent.value.author = user.value
+      if (newContent.value && userRemake.value) {
+        newContent.value.author = userRemake.value
         await addDoc(collection(db, 'contents'), newContent.value)
         loading.value.newContent = false
       }

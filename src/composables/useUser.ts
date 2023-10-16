@@ -75,7 +75,8 @@ export const useUser = () => {
   }
 
   function googleLogout() {
-    localStorage.removeItem('user')
+    auth.signOut()
+    user.value = null
   }
 
   return {

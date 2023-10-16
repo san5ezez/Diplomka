@@ -83,6 +83,9 @@ export const useUser = () => {
     user,
     loading,
     googleRegister,
-    googleLogout
+    googleLogout,
+    getAllUsers,
+    userRemake,
+    userList
   }
 }

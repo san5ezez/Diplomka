@@ -1,7 +1,7 @@
 import { collection, getDocs, addDoc, type DocumentData } from 'firebase/firestore'
 import { db, storage } from '@/firebase'
 import { getStorage, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 
 const user = ref()
@@ -15,9 +15,6 @@ const loading = ref({
 const userRemake = computed(() => {
   if (user.value) {
     return {
-      displayName: user.value.displayName,
-      email: user.value.email,
-      photoURL: user.value.photoURL,
       uid: user.value.uid
     }
   }
@@ -34,6 +31,7 @@ export const useUser = () => {
       .then(async (userCredential) => {
         user.value = userCredential.user
         await addUserToMainDatabase()
+        getFromMainDatabase()
       })
       .catch((error) => {
         console.error(error)
@@ -74,10 +72,29 @@ export const useUser = () => {
     return userList.value.some((item: any) => item.uid === userRemake.value?.uid)
   }
 
+  function getFromMainDatabase() {
+    await getAllUsers()
+    user.value = userList.value.find((item: any) => item.uid === userRemake.value?.uid)
+  }
+
+  function updateUserInDatabase() {
+    db.collection('users')
+      .doc(user.value.uid)
+      .update({
+        ...user.value
+      })
+  }
+
   function googleLogout() {
     auth.signOut()
     user.value = null
   }
+
+  watch(user.value, async (newValue) => {
+    if (newValue) {
+      await updateUserInDatabase()
+    }
+  })
 
   return {
     user,

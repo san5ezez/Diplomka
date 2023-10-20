@@ -3,14 +3,13 @@ import { db, storage } from '@/firebase'
 import { getStorage, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { ref, computed } from 'vue'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-
-import { useUser } from './useUser.1'
+import { useUser } from './useUser'
 
 export const useContent = () => {
   const content = ref()
   const contentList = ref([] as DocumentData)
   const newContent = ref({
-    author: ''
+    author: '' as any
   })
 
   const loading = ref({
@@ -44,11 +43,11 @@ export const useContent = () => {
   }
 
   async function addContent() {
-    const { userRemake } = useUser()
+    const { userToObject } = useUser()
     loading.value.newContent = true
     try {
-      if (newContent.value && userRemake.value) {
-        newContent.value.author = userRemake.value
+      if (newContent.value && userToObject.value) {
+        newContent.value.author = userToObject.value
         await addDoc(collection(db, 'contents'), newContent.value)
         loading.value.newContent = false
       }

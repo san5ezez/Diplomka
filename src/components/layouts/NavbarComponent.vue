@@ -11,3 +11,4 @@ import { useUser } from '@/composables/useUser'
 
 const { user, googleRegister, googleLogout } = useUser()
 </script>
+import { useUser } from '@/composables/useUser.1';

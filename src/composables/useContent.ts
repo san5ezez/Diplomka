@@ -4,7 +4,7 @@ import { getStorage, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { ref, computed } from 'vue'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 
-import { useUser } from './useUser'
+import { useUser } from './useUser.1'
 
 export const useContent = () => {
   const content = ref()

@@ -1,39 +1,8 @@
-import {
-  collection,
-  getDocs,
-  addDoc,
-  type DocumentData,
-  getDoc,
-  doc,
-  setDoc
-} from 'firebase/firestore'
-import { db, storage } from '@/firebase'
-import { getStorage, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { ref, computed, watch } from 'vue'
+import { collection, getDocs, addDoc, getDoc, doc, setDoc } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { watch } from 'vue'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-
-const user = ref()
-const userList = ref([] as DocumentData)
-
-const loading = ref({
-  user: false,
-  userList: false
-})
-
-const userToObject = computed(() => {
-  if (user.value) {
-    return {
-      uid: user.value.uid,
-      email: user.value.email,
-      displayName: user.value.displayName,
-      photoURL: user.value.photoURL,
-      favourites: user.value.favourites ?? [],
-      status: user.value.status ?? 'user',
-      reviews: user.value.reviews ?? []
-    }
-  }
-  return null
-})
+import { user, loading, newUserToObject, userList } from './useUser'
 
 export const useUser = () => {
   const auth = getAuth()
@@ -46,10 +15,7 @@ export const useUser = () => {
       .then(async (userCredential) => {
         user.value = userCredential.user
 
-        // проверка первый ли раз он зашел
         await addUserToMainDatabase()
-
-        // достаем данные если не первый раз
         await getFromMainDatabase()
       })
       .catch((error) => {
@@ -60,10 +26,10 @@ export const useUser = () => {
   async function addUserToMainDatabase() {
     loading.value.user = true
     try {
-      if (userToObject.value) {
+      if (newUserToObject.value) {
         await getAllUsers()
         if (!checkUserInDatabase()) {
-          await addDoc(collection(db, 'users'), userToObject.value)
+          await addDoc(collection(db, 'users'), newUserToObject.value)
         } else {
           console.error('User already in database')
         }
@@ -74,7 +40,6 @@ export const useUser = () => {
     }
   }
 
-  // получить всех юзеров
   async function getAllUsers() {
     loading.value.userList = true
     try {
@@ -88,18 +53,15 @@ export const useUser = () => {
     }
   }
 
-  // проверка есть ли юзер в базе данных
   function checkUserInDatabase() {
-    return userList.value.some((item: any) => item.uid === userToObject.value?.uid)
+    return userList.value.some((item: any) => item.uid === newUserToObject.value?.uid)
   }
 
-  // получить данные из базы данных
   async function getFromMainDatabase() {
     await getAllUsers()
     user.value = userList.value.find((item: any) => item.uid === user.value?.uid)
   }
 
-  // обновить данные в базе данных
   async function updateUserInDatabase() {
     if (user.value) {
       try {
@@ -119,7 +81,6 @@ export const useUser = () => {
     }
   }
 
-  // выйти из гугла
   function googleLogout() {
     auth.signOut()
     user.value = null
@@ -139,7 +100,7 @@ export const useUser = () => {
     googleRegister,
     googleLogout,
     getAllUsers,
-    userToObject,
+    newUserToObject,
     userList
   }
 }

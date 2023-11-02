@@ -7,7 +7,7 @@ import {
   doc,
   setDoc
 } from 'firebase/firestore'
-import { db, storage } from '@/firebase'
+import { db, storage } from '@/firebases'
 import { getStorage, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { ref, computed, watch } from 'vue'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
@@ -38,6 +38,10 @@ const userToObject = computed(() => {
 export const useUser = () => {
   const auth = getAuth()
 
+  const yourDatabase = 'usersAdil'
+  // const yourDatabase = 'usersSasha'
+  // const yourDatabase = 'usersBekzhan'
+
   // войти с помощью окна гугл
   function googleRegister() {
     const provider = new GoogleAuthProvider()
@@ -66,7 +70,7 @@ export const useUser = () => {
       if (userToObject.value) {
         await getAllUsers()
         if (!checkUserInDatabase()) {
-          await addDoc(collection(db, 'users'), userToObject.value)
+          await addDoc(collection(db, yourDatabase), userToObject.value)
         } else {
           console.error('User already in database')
         }
@@ -81,7 +85,7 @@ export const useUser = () => {
   async function getAllUsers() {
     loading.value.userList = true
     try {
-      const querySnapshot = await getDocs(collection(db, 'users'))
+      const querySnapshot = await getDocs(collection(db, yourDatabase))
       querySnapshot.forEach((doc) => {
         userList.value.push(doc.data())
       })
@@ -106,7 +110,7 @@ export const useUser = () => {
   async function updateUserInDatabase() {
     if (user.value) {
       try {
-        const userDocRef = doc(db, 'users', user.value.uid)
+        const userDocRef = doc(db, yourDatabase, user.value.uid)
         const existingUserDoc = await getDoc(userDocRef)
         if (existingUserDoc.exists()) {
           const userData = existingUserDoc.data()
@@ -115,6 +119,7 @@ export const useUser = () => {
             ...user.value
           }
           await setDoc(userDocRef, updatedData)
+          await addToLocalStorage()
         }
       } catch (error) {
         console.error(error)

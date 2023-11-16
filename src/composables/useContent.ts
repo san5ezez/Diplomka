@@ -17,13 +17,17 @@ export const useContent = () => {
   const content = ref()
   const contentList = ref([] as DocumentData)
   const newContent = ref({
+    count: 0 as any,
+    price: 0 as any,
+    category: "" as any,
+    desc: "" as any,
     id: Date.now().toString(),
     author: '' as any,
     image: '' as any
   })
 
-  const yourDatabase = 'contentAdil'
-  // const yourDatabase = 'contentSasha'
+  // const yourDatabase = 'contentAdil'
+  const yourDatabase = 'contentSasha'
   // const yourDatabase = 'contentBekzhan'
 
   const loading = ref({

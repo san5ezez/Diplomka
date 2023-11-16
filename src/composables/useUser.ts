@@ -38,8 +38,8 @@ const userToObject = computed(() => {
 export const useUser = () => {
   const auth = getAuth()
 
-  const yourDatabase = 'usersAdil'
-  // const yourDatabase = 'usersSasha'
+  // const yourDatabase = 'usersAdil'
+  const yourDatabase = 'usersSasha'
   // const yourDatabase = 'usersBekzhan'
 
   // войти с помощью окна гугл

@@ -63,9 +63,9 @@ const items = ref([
     route: '/Admin-panel',
   },
   // {
-  //   label: 'Настройки',
-  //   icon: 'pi pi-fw pi-cog',
-  //   route: '/settings',
+  //   label: '',
+  //   icon: 'pi pi-shopping-cart',
+  //   route: '/cart',
   // },
 ])
 

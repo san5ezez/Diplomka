@@ -21,9 +21,10 @@ export const useContent = () => {
     price: 0 as any,
     category: "" as any,
     desc: "" as any,
-    id: Date.now().toString(),
+    id: Date.now(),
     author: '' as any,
-    image: '' as any
+    image: {} as any,
+    title: '' as any
   })
 
   // const yourDatabase = 'contentAdil'
@@ -132,6 +133,7 @@ export const useContent = () => {
   }
 
   return {
+    uploadImage,
     content,
     contentList,
     loading,

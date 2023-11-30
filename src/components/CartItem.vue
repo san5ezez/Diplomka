@@ -1,28 +1,54 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
 import Button from 'primevue/button'
+
+defineProps({
+    item: {
+        type: Object,
+        required: true,
+    }
+})
+import { ref } from 'vue';
+
+
 </script>
 
 <template>
     <div class="card flex align-items-center justify-content-center">
         <Card style="width: 25em">
+
             <template #header>
-                <img alt="user header" src=".//peidge.jpg" />
+                <p v-html="item?.title"></p>
+                <img :src="item?.image" class="custom-image" alt="Image" />
             </template>
-            <template #title> Chat GPT </template>
             <template #content>
-                <p class="m-0">
-                    ChatGPT — чат-бот с искусственным интеллектом, разработанный компанией OpenAI и способный работать в
-                    диалоговом режиме, поддерживающий запросы на естественных языках. Система способна отвечать на вопросы,
-                    генерировать тексты на разных языках, включая русский, относящиеся к различным предметным областям.
-                </p>
+                <p class="m-0" v-html="item?.desc" />
             </template>
             <template #footer>
-                <!-- <Button icon="pi pi-check" label="Save" />
-                <Button icon="pi pi-times" label="Cancel" severity="secondary" style="margin-left: 0.5em" /> -->
+                <p v-html="item?.desc" />
             </template>
+            <template #category>
+                {{ item?.category }}
+            </template>
+
         </Card>
     </div>
 </template>
 
-<style></style>
+<style>
+.custom-image {
+    width: 390px;
+    height: 200px;
+    object-fit: cover;
+}
+</style>
+
+<!-- const newContent = ref({
+    count: 0 as any,
+    price: 0 as any,
+    category: "" as any,
+    desc: "" as any,
+    id: Date.now().toString(),
+    author: '' as any,
+    image: '' as any
+  }) -->

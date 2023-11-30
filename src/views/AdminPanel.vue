@@ -9,11 +9,11 @@
             <div class="card">
                 <Editor v-model="newContent.desc" editorStyle="height: 153px" />
             </div>
-            <!-- <div class="flex-auto">
+            <div class="flex-auto">
                 <label for="stacked-buttons" class="font-bold block mb-2"> Стоймость: </label>
                 <InputNumber v-model="newContent.price" inputId="stacked-buttons" showButtons mode="currency"
                     currency="KZT" />
-            </div> -->
+            </div>
             <form class="inputwrapper" enctype="multipart/form-data">
                 <input id="inputfile" class="input inputfile" name="images" type="file" accept=".jpg, .png"
                     @input="onUpload($event)" />
@@ -29,13 +29,16 @@
     </div>
 </template>
 <script setup lang="ts">
-import InputText from 'primevue/inputtext';
 import { useContent } from '@/composables/useContent';
 import Button from 'primevue/button';
+import { ref } from "vue";
 import InputNumber from 'primevue/inputnumber';
 import Dialog from 'primevue/dialog';
 import Editor from 'primevue/editor';
-
+import { newContent } from '@/composables/useContent';
+import { addContent } from '@/composables/useContent';
+const { newContent, addContent, uploadImage } = useContent()
+const visible = ref(false);
 
 async function onUpload(e) {
     const image = e.target.files[0]

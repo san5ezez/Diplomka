@@ -25,9 +25,8 @@ const togglePlay = () => {
   isPlaying.value = !isPlaying.value;
 };
 
-// Обновление файла в ответ на изменение атрибута src
 const updateAudioFile = () => {
-  sound.unload(); // Очистка предыдущего звука
+  sound.unload();
   sound.load({ src: [audioFile.value] });
 };
 
